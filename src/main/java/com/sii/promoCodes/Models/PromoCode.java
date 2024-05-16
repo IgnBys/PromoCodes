@@ -1,9 +1,9 @@
 package com.sii.promoCodes.Models;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import java.util.Date;
 import java.util.Random;
 import java.util.UUID;
@@ -25,7 +25,7 @@ public class PromoCode{
         this.code = generateUniqueCode();
     }
     public PromoCode(Date expirationDate, double discountAmount, String currency, int maxUsages) {
-        this.code = generateUniqueCode();;
+        this.code = generateUniqueCode();
         this.expirationDate = expirationDate;
         this.discountAmount = discountAmount;
         this.currency = currency;
