@@ -42,6 +42,23 @@ public class PromoCode{
     private int currentUsages;
 
 
+    public PromoCode() {
+
+    }
+    public PromoCode(Long id, String code, LocalDateTime expirationDate, LocalDateTime startedAt, BigDecimal discountAmount, String currency, int maxUsages, int currentUsages) {
+        this.id = id;
+        this.code = code;
+        this.expirationDate = expirationDate;
+        this.startedAt = startedAt;
+        this.discountAmount = discountAmount;
+        this.currency = currency;
+        this.maxUsages = maxUsages;
+        this.currentUsages = currentUsages;
+    }
+
+
+
+
     public Long getId() {
         return id;
     }

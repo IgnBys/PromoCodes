@@ -22,6 +22,18 @@ public class Product {
 
     private String description;
 
+    public Product(){
+
+    }
+
+    public Product(Long id, String name, BigDecimal price, String currency, String description) {
+        this.id = id;
+        this.name = name;
+        this.price = price;
+        this.currency = currency;
+        this.description = description;
+    }
+
     public Long getId() {
         return id;
     }

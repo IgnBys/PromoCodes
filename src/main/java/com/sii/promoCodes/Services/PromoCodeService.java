@@ -10,8 +10,11 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class PromoCodeService {
-    @Autowired
     private PromoCodeRepository promoCodeRepository;
+
+    public PromoCodeService(PromoCodeRepository promoCodeRepository) {
+        this.promoCodeRepository = promoCodeRepository;
+    }
 
     public PromoCode createPromoCode(PromoCode promoCode) {
         promoCode.setCurrentUsages(0);

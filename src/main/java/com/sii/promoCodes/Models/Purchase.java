@@ -29,6 +29,18 @@ public class Purchase {
 
     private BigDecimal finalPrice;
 
+    public Purchase(){
+
+    }
+
+    public Purchase(Long id, LocalDateTime purchaseDate, BigDecimal regularPrice, BigDecimal discountAmount, BigDecimal finalPrice) {
+        this.id = id;
+        this.purchaseDate = purchaseDate;
+        this.regularPrice = regularPrice;
+        this.discountAmount = discountAmount;
+        this.finalPrice = finalPrice;
+    }
+
     public Long getId() {
         return id;
     }
