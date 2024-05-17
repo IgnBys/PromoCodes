@@ -10,13 +10,13 @@ public class Purchase {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(nullable = false)
-    private Product product;
-
-    @ManyToOne
-    @JoinColumn(nullable = false)
-    private PromoCode promoCode;
+//    @ManyToOne
+//    @JoinColumn(nullable = false)
+//    private Product product;
+//
+//    @ManyToOne
+//    @JoinColumn(nullable = false)
+//    private PromoCode promoCode;
 
     @Column(nullable = false)
     private LocalDateTime purchaseDate;
@@ -37,21 +37,21 @@ public class Purchase {
         this.id = id;
     }
 
-    public Product getProduct() {
-        return product;
-    }
-
-    public void setProduct(Product product) {
-        this.product = product;
-    }
-
-    public PromoCode getPromoCode() {
-        return promoCode;
-    }
-
-    public void setPromoCode(PromoCode promoCode) {
-        this.promoCode = promoCode;
-    }
+//    public Product getProduct() {
+//        return product;
+//    }
+//
+//    public void setProduct(Product product) {
+//        this.product = product;
+//    }
+//
+//    public PromoCode getPromoCode() {
+//        return promoCode;
+//    }
+//
+//    public void setPromoCode(PromoCode promoCode) {
+//        this.promoCode = promoCode;
+//    }
 
     public LocalDateTime getPurchaseDate() {
         return purchaseDate;

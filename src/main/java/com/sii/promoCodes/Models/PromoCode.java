@@ -1,14 +1,13 @@
 package com.sii.promoCodes.Models;
 
+import jakarta.ejb.Local;
 import jakarta.persistence.*;
 
 import java.math.BigDecimal;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.Date;
 import java.util.Random;
 
@@ -22,13 +21,13 @@ public class PromoCode{
     private String code;
 
     @Column(nullable = false)
-    private Date expirationDate;
+    private LocalDateTime expirationDate;
 
 
 
     @CreationTimestamp
-    @Column(name =  "started_at")
-    private Date startedAt;
+    @Column(nullable = false)
+    private LocalDateTime startedAt;
 
     @Column(nullable = false)
     private BigDecimal discountAmount;
@@ -38,6 +37,10 @@ public class PromoCode{
 
     @Column(nullable = false)
     private int maxUsages;
+
+    @Column(nullable = false)
+    private int currentUsages;
+
 
     public Long getId() {
         return id;
@@ -55,19 +58,20 @@ public class PromoCode{
     public void setCode(String code) {
         this.code = code;
     }
-    public Date getStartedAt() {
-        return startedAt;
+    public LocalDateTime getStartedAt() {
+        return startedAt.truncatedTo(ChronoUnit.SECONDS);
+//        return startedAt;
     }
 
-    public void setStartedAt(Date startedAt) {
+    public void setStartedAt(LocalDateTime startedAt) {
         this.startedAt = startedAt;
     }
 
-    public Date getExpirationDate() {
+    public LocalDateTime getExpirationDate() {
         return expirationDate;
     }
 
-    public void setExpirationDate(Date expirationDate) {
+    public void setExpirationDate(LocalDateTime expirationDate) {
         this.expirationDate = expirationDate;
     }
 
@@ -103,8 +107,6 @@ public class PromoCode{
         this.currentUsages = currentUsages;
     }
 
-    @Column(nullable = false)
-    private int currentUsages;
 
 
 }
