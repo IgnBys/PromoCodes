@@ -10,9 +10,9 @@ public class Purchase {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-//    @ManyToOne
-//    @JoinColumn(nullable = false)
-//    private Product product;
+    @ManyToOne
+    @JoinColumn(nullable = false)
+    private Product product;
 //
 //    @ManyToOne
 //    @JoinColumn(nullable = false)
@@ -49,13 +49,13 @@ public class Purchase {
         this.id = id;
     }
 
-//    public Product getProduct() {
-//        return product;
-//    }
-//
-//    public void setProduct(Product product) {
-//        this.product = product;
-//    }
+    public Product getProduct() {
+        return product;
+    }
+
+    public void setProduct(Product product) {
+        this.product = product;
+    }
 //
 //    public PromoCode getPromoCode() {
 //        return promoCode;

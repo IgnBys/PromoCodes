@@ -8,7 +8,6 @@ import com.sii.promoCodes.Repositories.PromoCodeRepository;
 import com.sii.promoCodes.Repositories.PurchaseRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -28,43 +27,49 @@ public class ProductService {
 
     public Product discountProduct(String productName, String promoCodeStr) {
 
+        Optional<Product> productOptional = getProductByName(productName);
+        if(productOptional.isPresent()) {
+            Product product = productOptional.get();
+            PromoCode promoCode = promoCodeRepository.findByCode(promoCodeStr);
 
-        Product product = productRepository.findByName(productName).orElseThrow(() -> new RuntimeException("Product not found"));
-        PromoCode promoCode = promoCodeRepository.findByCode(promoCodeStr);
+            if (promoCode == null) {
+                throw new RuntimeException("Promo code not found");
+            }
 
-        if (promoCode == null) {
-            throw new RuntimeException("Promo code not found");
+            BigDecimal discountAmount = BigDecimal.ZERO;
+
+
+
+            if (promoCode.getExpirationDate().isBefore(LocalDateTime.now())) {
+                throw new RuntimeException("Promo code expired");
+            }
+
+            if (!promoCode.getCurrency().equals(product.getCurrency())) {
+                throw new RuntimeException("Currency mismatch");
+            }
+
+            if (promoCode.getCurrentUsages() >= promoCode.getMaxUsages()) {
+                throw new RuntimeException("Promo code usage limit reached");
+            }
+
+            discountAmount = promoCode.getDiscountAmount();
+            BigDecimal finalPrice = product.getPrice().subtract(discountAmount);
+
+            if (finalPrice.compareTo(BigDecimal.ZERO) < 0) {
+                finalPrice = BigDecimal.ZERO;
+            }
+            product.setPrice(finalPrice);
+
+
+            promoCode.setCurrentUsages(promoCode.getCurrentUsages() + 1);
+            promoCodeRepository.save(promoCode);
+
+            return productRepository.save(product);
+        }else {
+            throw new RuntimeException("Product not found");
+
         }
 
-        BigDecimal discountAmount = BigDecimal.ZERO;
-
-
-
-        if (promoCode.getExpirationDate().isBefore(LocalDateTime.now())) {
-            throw new RuntimeException("Promo code expired");
-        }
-
-        if (!promoCode.getCurrency().equals(product.getCurrency())) {
-            throw new RuntimeException("Currency mismatch");
-        }
-
-        if (promoCode.getCurrentUsages() >= promoCode.getMaxUsages()) {
-            throw new RuntimeException("Promo code usage limit reached");
-        }
-
-        discountAmount = promoCode.getDiscountAmount();
-        BigDecimal finalPrice = product.getPrice().subtract(discountAmount);
-
-        if (finalPrice.compareTo(BigDecimal.ZERO) < 0) {
-            finalPrice = BigDecimal.ZERO;
-        }
-        product.setPrice(finalPrice);
-
-
-        promoCode.setCurrentUsages(promoCode.getCurrentUsages() + 1);
-        promoCodeRepository.save(promoCode);
-
-        return productRepository.save(product);
     }
 
     public Product createProduct(Product product) {

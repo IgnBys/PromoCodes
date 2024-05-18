@@ -4,17 +4,18 @@ import com.sii.promoCodes.Repositories.PromoCodeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.stereotype.Service;
 
 @Service
 public class PromoCodeService {
+    @Autowired
     private PromoCodeRepository promoCodeRepository;
 
-    public PromoCodeService(PromoCodeRepository promoCodeRepository) {
-        this.promoCodeRepository = promoCodeRepository;
-    }
+    @Autowired
+    private ProductService productService;
 
     public PromoCode createPromoCode(PromoCode promoCode) {
         promoCode.setCurrentUsages(0);
@@ -28,6 +29,9 @@ public class PromoCodeService {
     public Optional<PromoCode> getPromoCodeById(Long id) {
         return promoCodeRepository.findById(id);
     }
+
+
+
 
     public PromoCode getPromoCodeByCode(String code) {
         return promoCodeRepository.findByCode(code);

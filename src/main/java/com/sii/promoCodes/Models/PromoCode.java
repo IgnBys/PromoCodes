@@ -1,5 +1,6 @@
 package com.sii.promoCodes.Models;
 
+import com.sii.promoCodes.Repositories.PromoCodeRepository;
 import jakarta.ejb.Local;
 import jakarta.persistence.*;
 
@@ -77,7 +78,6 @@ public class PromoCode{
     }
     public LocalDateTime getStartedAt() {
         return startedAt.truncatedTo(ChronoUnit.SECONDS);
-//        return startedAt;
     }
 
     public void setStartedAt(LocalDateTime startedAt) {
@@ -124,6 +124,9 @@ public class PromoCode{
         this.currentUsages = currentUsages;
     }
 
-
+    public boolean isValid(PromoCode promoCode) {
+        LocalDateTime now = LocalDateTime.now();
+        return now.isAfter(startedAt) && now.isBefore(expirationDate) && promoCode!=null;
+    }
 
 }
