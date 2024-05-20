@@ -1,16 +1,10 @@
 package com.sii.promoCodes.Models;
 
-import com.sii.promoCodes.Repositories.PromoCodeRepository;
-import jakarta.ejb.Local;
 import jakarta.persistence.*;
-
 import java.math.BigDecimal;
 import org.hibernate.annotations.CreationTimestamp;
-
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
-import java.util.Date;
-import java.util.Random;
 
 @Entity
 public class PromoCode{
@@ -124,9 +118,5 @@ public class PromoCode{
         this.currentUsages = currentUsages;
     }
 
-    public boolean isValid(PromoCode promoCode) {
-        LocalDateTime now = LocalDateTime.now();
-        return now.isAfter(startedAt) && now.isBefore(expirationDate) && promoCode!=null;
-    }
 
 }

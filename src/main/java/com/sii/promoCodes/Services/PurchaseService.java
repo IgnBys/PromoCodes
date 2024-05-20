@@ -3,42 +3,38 @@ package com.sii.promoCodes.Services;
 import com.sii.promoCodes.Models.Product;
 import com.sii.promoCodes.Models.PromoCode;
 import com.sii.promoCodes.Models.Purchase;
-import com.sii.promoCodes.Repositories.ProductRepository;
 import com.sii.promoCodes.Repositories.PromoCodeRepository;
 import com.sii.promoCodes.Repositories.PurchaseRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class PurchaseService {
-    @Autowired
-    private ProductService productService;
-    @Autowired
-    private PromoCodeService promoCodeService;
-    @Autowired
-    private PromoCodeRepository promoCodeRepository;
-    @Autowired
-    private PurchaseRepository purchaseRepository;
+    private final ProductService productService;
+    private final PromoCodeService promoCodeService;
+    private final PromoCodeRepository promoCodeRepository;
+    private final PurchaseRepository purchaseRepository;
 
-    public PurchaseService(ProductService productService, PromoCodeService promoCodeService, PurchaseRepository purchaseRepository) {
+    public PurchaseService(ProductService productService, PromoCodeService promoCodeService, PromoCodeRepository promoCodeRepository, PurchaseRepository purchaseRepository) {
         this.productService = productService;
         this.promoCodeService = promoCodeService;
+        this.promoCodeRepository = promoCodeRepository;
         this.purchaseRepository = purchaseRepository;
     }
 
+//    public PurchaseService(ProductService productService, PromoCodeService promoCodeService, PurchaseRepository purchaseRepository) {
+//        this.productService = productService;
+//        this.promoCodeService = promoCodeService;
+//        this.purchaseRepository = purchaseRepository;
+//    }
+
     public Purchase simulatePurchaseWithPromoCode(String productName, String promoCodeStr) {
-        Optional<Product> productOptional = productService.getProductByName(productName);
-        if(productOptional.isPresent()) {
-            Product product = productOptional.get();
-            PromoCode promoCode = promoCodeService.getPromoCodeByCode(promoCodeStr);
+        Product productOptional = productService.getProductByName(productName);
+        if(productOptional != null) {
+            Product product = productOptional;
+            PromoCode promoCode = promoCodeService.getPromoCode(promoCodeStr);
             BigDecimal regularPrice = product.getPrice();
             BigDecimal discountAmount = BigDecimal.ZERO;
             if (promoCode!=null) {
@@ -74,9 +70,9 @@ public class PurchaseService {
     }
 
     public Purchase simulatePurchaseWithoutPromoCode(String productName) {
-        Optional<Product> productOptional = productService.getProductByName(productName);
-        if (productOptional.isPresent()) {
-            Product product = productOptional.get();
+        Product productOptional = productService.getProductByName(productName);
+        if (productOptional != null) {
+            Product product = productOptional;
             BigDecimal regularPrice = product.getPrice();
             BigDecimal discountAmount = BigDecimal.ZERO;
 

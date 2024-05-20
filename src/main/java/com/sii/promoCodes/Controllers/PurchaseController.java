@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.http.ResponseEntity;
 
+import javax.print.attribute.standard.PrinterURI;
 import java.util.List;
 
 
@@ -17,10 +18,8 @@ import java.util.List;
 @RequestMapping("/purchases")
 public class PurchaseController {
 
-    @Autowired
     private final PromoCodeService promoCodeService;
 
-    @Autowired
     private final PurchaseService purchaseService;
 
     public PurchaseController(PromoCodeService promoCodeService, PurchaseService purchaseService) {
@@ -36,26 +35,18 @@ public class PurchaseController {
     }
 
     @PostMapping("/{productName}")
-    public ResponseEntity<Purchase> simulatePurchaseWithoutPromoCode(@PathVariable String productName){
-        try {
-            Purchase purchase = purchaseService.simulatePurchaseWithoutPromoCode(productName);
-            return ResponseEntity.ok(purchase);
-        } catch (RuntimeException e) {
-            return ResponseEntity.badRequest().build();
-        }
+    @ResponseStatus(HttpStatus.CREATED)
+    public Purchase simulatePurchaseWithoutPromoCode(@PathVariable String productName){
+            return purchaseService.simulatePurchaseWithoutPromoCode(productName);
     }
 
     @PostMapping("/{productName}/{promoCodeStr}")
     public ResponseEntity<Purchase> simulatePurchaseWithPromoCode(@PathVariable String productName, @PathVariable String promoCodeStr) {
-        PromoCode promoCode = promoCodeService.getPromoCodeByCode(promoCodeStr);
+        PromoCode promoCode = promoCodeService.getPromoCode(promoCodeStr);
         if (promoCode == null) {
             return new ResponseEntity(HttpStatus.NOT_FOUND);
         }
-        try {
-            Purchase purchase = purchaseService.simulatePurchaseWithPromoCode(productName, promoCodeStr);
-            return ResponseEntity.ok(purchase);
-        } catch (RuntimeException e) {
-            return ResponseEntity.badRequest().build();
-        }
+        Purchase purchase =  purchaseService.simulatePurchaseWithPromoCode(productName, promoCodeStr);
+        return ResponseEntity.ok(purchase);
     }
 }

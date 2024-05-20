@@ -1,10 +1,7 @@
 package com.sii.promoCodes.Controllers;
 
-
 import com.sii.promoCodes.Models.PromoCode;
-//import com.sii.promoCodes.Services.PromoCodeService;
 import com.sii.promoCodes.Services.PromoCodeService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,23 +11,27 @@ import java.util.List;
 @RestController
 @RequestMapping("/promocodes")
 public class PromoCodeController {
-    @Autowired
-    private PromoCodeService promoCodeService;
+    private final PromoCodeService promoCodeService;
+
+    public PromoCodeController(PromoCodeService promoCodeService) {
+        this.promoCodeService = promoCodeService;
+    }
 
     @PostMapping
-    public ResponseEntity<PromoCode> createPromoCode(@RequestBody PromoCode promoCode) {
-        try{
-            if (promoCode.getCode().length()>=3 && promoCode.getCode().length()<=24 ){
-                PromoCode createdPromoCode = promoCodeService.createPromoCode(promoCode);
-                return ResponseEntity.ok(createdPromoCode);
-            } else {
-                return ResponseEntity.badRequest().build();
-            }
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-        }
-
+    @ResponseStatus(HttpStatus.CREATED)
+    public PromoCode createPromoCode(@RequestBody PromoCode promoCode) {
+        return promoCodeService.createPromoCode(promoCode);
     }
+//        PromoCode createdPromoCode = promoCodeService.createPromoCode(promoCode);
+//        if(createdPromoCode != null){
+//
+//            return ResponseEntity.ok(createdPromoCode);
+//        }
+//        else {
+//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).header("error", "Incorrect length").build();
+//
+//        }
+//    }
 
     @GetMapping
     public ResponseEntity<List<PromoCode>> getAllPromoCodes() {
@@ -41,7 +42,7 @@ public class PromoCodeController {
 
     @GetMapping("/{code}")
     public ResponseEntity<PromoCode> getPromoCodeByCode(@PathVariable String code) {
-        PromoCode promoCode = promoCodeService.getPromoCodeByCode(code);
+        PromoCode promoCode = promoCodeService.getPromoCode(code);
 
         if (promoCode == null) {
             return new ResponseEntity(HttpStatus.NOT_FOUND);

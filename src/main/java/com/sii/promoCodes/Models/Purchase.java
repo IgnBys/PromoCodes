@@ -1,6 +1,5 @@
 package com.sii.promoCodes.Models;
 import jakarta.persistence.*;
-
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
@@ -13,10 +12,7 @@ public class Purchase {
     @ManyToOne
     @JoinColumn(nullable = false)
     private Product product;
-//
-//    @ManyToOne
-//    @JoinColumn(nullable = false)
-//    private PromoCode promoCode;
+
 
     @Column(nullable = false)
     private LocalDateTime purchaseDate;
@@ -56,14 +52,6 @@ public class Purchase {
     public void setProduct(Product product) {
         this.product = product;
     }
-//
-//    public PromoCode getPromoCode() {
-//        return promoCode;
-//    }
-//
-//    public void setPromoCode(PromoCode promoCode) {
-//        this.promoCode = promoCode;
-//    }
 
     public LocalDateTime getPurchaseDate() {
         return purchaseDate;

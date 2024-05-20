@@ -1,35 +1,30 @@
 package com.sii.promoCodes.Services;
-
 import com.sii.promoCodes.Models.Product;
 import com.sii.promoCodes.Models.PromoCode;
-import com.sii.promoCodes.Models.Purchase;
 import com.sii.promoCodes.Repositories.ProductRepository;
 import com.sii.promoCodes.Repositories.PromoCodeRepository;
-import com.sii.promoCodes.Repositories.PurchaseRepository;
 import org.springframework.stereotype.Service;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class ProductService {
-    @Autowired
-    private ProductRepository productRepository;
+    private final ProductRepository productRepository;
 
-    @Autowired
-    private PurchaseRepository purchaseRepository;
+    private final PromoCodeRepository promoCodeRepository;
 
-    @Autowired
-    private PromoCodeRepository promoCodeRepository;
+    public ProductService(ProductRepository productRepository, PromoCodeRepository promoCodeRepository) {
+        this.productRepository = productRepository;
+        this.promoCodeRepository = promoCodeRepository;
+    }
 
     public Product discountProduct(String productName, String promoCodeStr) {
 
-        Optional<Product> productOptional = getProductByName(productName);
-        if(productOptional.isPresent()) {
-            Product product = productOptional.get();
+        Product productOptional = getProductByName(productName);
+        if(productOptional != null) {
+            Product product = productOptional;
             PromoCode promoCode = promoCodeRepository.findByCode(promoCodeStr);
 
             if (promoCode == null) {
@@ -80,7 +75,7 @@ public class ProductService {
         return productRepository.findAll();
     }
 
-    public Optional<Product> getProductByName(String name) {
+    public Product getProductByName(String name) {
         return productRepository.findByName(name);
     }
 

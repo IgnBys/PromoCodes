@@ -1,7 +1,6 @@
 package com.sii.promoCodes.Models;
 
 import jakarta.persistence.*;
-
 import java.math.BigDecimal;
 
 

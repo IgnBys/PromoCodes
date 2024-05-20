@@ -1,24 +1,24 @@
 package com.sii.promoCodes.Services;
 import com.sii.promoCodes.Models.PromoCode;
 import com.sii.promoCodes.Repositories.PromoCodeRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
-import org.springframework.stereotype.Service;
 
 @Service
 public class PromoCodeService {
-    @Autowired
-    private PromoCodeRepository promoCodeRepository;
+    private final PromoCodeRepository promoCodeRepository;
 
-    @Autowired
-    private ProductService productService;
+    public PromoCodeService(PromoCodeRepository promoCodeRepository) {
+        this.promoCodeRepository = promoCodeRepository;
+    }
 
     public PromoCode createPromoCode(PromoCode promoCode) {
-        promoCode.setCurrentUsages(0);
+        if (!(promoCode.getCode().length() >= 3 && promoCode.getCode().length() <= 24)) {
+            throw new RuntimeException("Incorrect length");
+        }
+        else {
+            promoCode.setCurrentUsages(0);
+        }
         return promoCodeRepository.save(promoCode);
     }
 
@@ -26,14 +26,7 @@ public class PromoCodeService {
         return promoCodeRepository.findAll();
     }
 
-    public Optional<PromoCode> getPromoCodeById(Long id) {
-        return promoCodeRepository.findById(id);
-    }
-
-
-
-
-    public PromoCode getPromoCodeByCode(String code) {
+    public PromoCode getPromoCode(String code) {
         return promoCodeRepository.findByCode(code);
     }
 }
