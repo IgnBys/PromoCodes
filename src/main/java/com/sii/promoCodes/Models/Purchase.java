@@ -9,10 +9,12 @@ public class Purchase {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(nullable = false)
-    private Product product;
+//    @ManyToOne
+//    @JoinColumn(nullable = false)
+//    private Product product;
 
+    @Column
+    private String warning;
 
     @Column(nullable = false)
     private LocalDateTime purchaseDate;
@@ -29,12 +31,22 @@ public class Purchase {
 
     }
 
-    public Purchase(Long id, LocalDateTime purchaseDate, BigDecimal regularPrice, BigDecimal discountAmount, BigDecimal finalPrice) {
+    public Purchase(Long id, LocalDateTime purchaseDate, BigDecimal regularPrice, BigDecimal discountAmount, BigDecimal finalPrice, String warning) {
         this.id = id;
         this.purchaseDate = purchaseDate;
         this.regularPrice = regularPrice;
         this.discountAmount = discountAmount;
         this.finalPrice = finalPrice;
+        this.warning = warning;
+
+    }
+
+    public Purchase(LocalDateTime purchaseDate, BigDecimal regularPrice, BigDecimal discountAmount, BigDecimal finalPrice, String warning) {
+        this.purchaseDate = purchaseDate;
+        this.regularPrice = regularPrice;
+        this.discountAmount = discountAmount;
+        this.finalPrice = finalPrice;
+        this.warning = warning;
     }
 
     public Long getId() {
@@ -45,13 +57,13 @@ public class Purchase {
         this.id = id;
     }
 
-    public Product getProduct() {
-        return product;
-    }
-
-    public void setProduct(Product product) {
-        this.product = product;
-    }
+//    public Product getProduct() {
+//        return product;
+//    }
+//
+//    public void setProduct(Product product) {
+//        this.product = product;
+//    }
 
     public LocalDateTime getPurchaseDate() {
         return purchaseDate;
@@ -83,5 +95,13 @@ public class Purchase {
 
     public void setFinalPrice(BigDecimal finalPrice) {
         this.finalPrice = finalPrice;
+    }
+
+    public String getWarning() {
+        return warning;
+    }
+
+    public void setWarning(String warning) {
+        this.warning = warning;
     }
 }

@@ -1,8 +1,10 @@
 package com.sii.promoCodes.Controllers;
 
 
+import com.sii.promoCodes.Models.DiscountResult;
 import com.sii.promoCodes.Models.PromoCode;
 import com.sii.promoCodes.Models.Purchase;
+import com.sii.promoCodes.Services.DiscountResultService;
 import com.sii.promoCodes.Services.PromoCodeService;
 import com.sii.promoCodes.Services.PurchaseService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,16 +17,19 @@ import java.util.List;
 
 
 @RestController
-@RequestMapping("/purchases")
+@RequestMapping("/purchase")
 public class PurchaseController {
 
     private final PromoCodeService promoCodeService;
 
     private final PurchaseService purchaseService;
 
-    public PurchaseController(PromoCodeService promoCodeService, PurchaseService purchaseService) {
+    private final DiscountResultService discountResultService;
+
+    public PurchaseController(PromoCodeService promoCodeService, PurchaseService purchaseService, DiscountResultService discountResultService) {
         this.promoCodeService = promoCodeService;
         this.purchaseService = purchaseService;
+        this.discountResultService = discountResultService;
     }
 
     @GetMapping
@@ -34,19 +39,19 @@ public class PurchaseController {
         return ResponseEntity.ok(purchases);
     }
 
-    @PostMapping("/{productName}")
+    @PostMapping("/{id}")
     @ResponseStatus(HttpStatus.CREATED)
-    public Purchase simulatePurchaseWithoutPromoCode(@PathVariable String productName){
-            return purchaseService.simulatePurchaseWithoutPromoCode(productName);
+    public Purchase simulatePurchaseWithoutPromoCode(@PathVariable long id){
+            return discountResultService.simulatePurchaseWithoutPromoCode(id);
     }
 
-    @PostMapping("/{productName}/{promoCodeStr}")
-    public ResponseEntity<Purchase> simulatePurchaseWithPromoCode(@PathVariable String productName, @PathVariable String promoCodeStr) {
+    @PostMapping("/{id}/{promoCodeStr}")
+    public ResponseEntity<Purchase> simulatePurchaseWithPromoCode(@PathVariable long id, @PathVariable String promoCodeStr) {
         PromoCode promoCode = promoCodeService.getPromoCode(promoCodeStr);
         if (promoCode == null) {
             return new ResponseEntity(HttpStatus.NOT_FOUND);
         }
-        Purchase purchase =  purchaseService.simulatePurchaseWithPromoCode(productName, promoCodeStr);
+        Purchase purchase =  discountResultService.simulatePurchaseWithPromoCode(id, promoCodeStr);
         return ResponseEntity.ok(purchase);
     }
 }

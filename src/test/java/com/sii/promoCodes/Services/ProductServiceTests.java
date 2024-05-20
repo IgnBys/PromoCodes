@@ -52,7 +52,7 @@
 //                null);
 //
 //
-//        when(productRepository.save(any(Product.class))).thenReturn(product);
+//        when(productRepository.save(product)).thenReturn(product);
 //        Product savedProduct = productService.createProduct(product);
 //        assertEquals(product, savedProduct);
 //    }
@@ -129,14 +129,40 @@
 //
 //    }
 //
+//
+//
 //    @Test
-//    public void shouldCorrectlyCalculateTheProductPriceAfterUsingThePromoCode() {
-//        final Product product = new Product(1L,
+//    void shouldCorrectlyDiscountTheProductPriceWithUsingPromoCode() {
+//        final PromoCode promoCode = new PromoCode(1L,
+//                "SUMMER2024",
+//                LocalDateTime.parse("2024-05-30T11:06:30", DateTimeFormatter.ISO_LOCAL_DATE_TIME),
+//                LocalDateTime.now(),
+//                BigDecimal.valueOf(25.00),
+//                "PLN",
+//                5,
+//                0);
+//
+//        Product product = new Product(1L,
 //                "Apple",
-//                BigDecimal.valueOf(55.55),
+//                BigDecimal.valueOf(30.00),
 //                "PLN",
 //                null);
 //
+//        final Product newProduct = new Product(2L,
+//                "Apple",
+//                BigDecimal.valueOf(5.00),
+//                "PLN",
+//                null);
+//        when(promoCodeRepository.findByCode(promoCode.getCode())).thenReturn(promoCode);
+//        when(productRepository.findByName(product.getName())).thenReturn(product);
+//        when(productRepository.save(product)).thenReturn(newProduct);
+//        product =  productService.discountProduct(product.getName(), promoCode.getCode());
+//        assertEquals(product.getPrice(), BigDecimal.valueOf(5.00));
+//    }
+//
+//
+//    @Test
+//    void shouldTTest() {
 //        final PromoCode promoCode = new PromoCode(1L,
 //                "SUMMER2024",
 //                LocalDateTime.parse("2024-05-30T11:06:18", DateTimeFormatter.ISO_LOCAL_DATE_TIME),
@@ -151,11 +177,14 @@
 //                BigDecimal.valueOf(30.00),
 //                "PLN",
 //                null);
-//        when(productRepository.findByName(product.getName())).thenReturn(newProduct);
-//        when(promoCodeRepository.findByCode(promoCode.getCode())).thenReturn(promoCode);
-//        Product discountedProduct = productService.discountProduct(product.getName(), promoCode.getCode());
-////        assertEquals(discountedProduct.getPrice(),  BigDecimal.valueOf(30.00));
-//        System.out.println(discountedProduct.getPrice());
+//        RuntimeException thrownException = null;
+//        try {
+//            productService.discountProduct(newProduct.getName(), promoCode.getCode());
+//        } catch (RuntimeException e) {
+//            thrownException = e;
+//        }
+//        assertEquals(thrownException.getMessage(), "Incorrect length");
 //    }
+//
 //
 //}

@@ -37,7 +37,7 @@
 //                5,
 //                0);
 //
-//        when(promoCodeRepository.save(any(PromoCode.class))).thenReturn(promoCode);
+//        when(promoCodeRepository.save(promoCode)).thenReturn(promoCode);
 //        PromoCode savedPromoCode = promoCodeService.createPromoCode(promoCode);
 //        assertEquals(promoCode, savedPromoCode);
 //    }
@@ -53,8 +53,8 @@
 //                5,
 //                0);
 //
-//        when(promoCodeRepository.findByCode(anyString())).thenReturn(promoCode);
-//        PromoCode foundPromoCode = promoCodeService.getPromoCodeByCode("SUMMER2024");
+//        when(promoCodeRepository.findByCode("SUMMER2024")).thenReturn(promoCode);
+//        PromoCode foundPromoCode = promoCodeService.getPromoCode("SUMMER2024");
 //        assertEquals("SUMMER2024", foundPromoCode.getCode());
 //    }
 //
@@ -89,7 +89,28 @@
 //        List<PromoCode> allPromoCodes = Arrays.asList(promoCode1, promoCode2, promoCode3);
 //        when(promoCodeRepository.findAll()).thenReturn(allPromoCodes);
 //        List<PromoCode> allFoundPromoCodes = promoCodeService.getAllPromoCodes();
-//        assertEquals(allPromoCodes, allFoundPromoCodes);
-////        assertEquals(3, allFoundPromoCodes.size());
+////        assertEquals(allPromoCodes, allFoundPromoCodes);
+//        assertEquals(3, allFoundPromoCodes.size());
 //    }
+//
+//    @Test
+//    void shouldReturnIncorrectLengthPromoCodeExceptionMessage() {
+//        final PromoCode promoCode = new PromoCode(1L,
+//                "SUMMERRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR2024",
+//                LocalDateTime.parse("2024-05-30T11:06:18", DateTimeFormatter.ISO_LOCAL_DATE_TIME),
+//                LocalDateTime.now(),
+//                BigDecimal.valueOf(25.55),
+//                "PLN",
+//                5,
+//                0);
+//
+//        RuntimeException thrownException = null;
+//        try {
+//            promoCodeService.createPromoCode(promoCode);
+//        } catch (RuntimeException e) {
+//            thrownException = e;
+//        }
+//        assertEquals(thrownException.getMessage(), "Incorrect length");
+//    }
+//
 //}

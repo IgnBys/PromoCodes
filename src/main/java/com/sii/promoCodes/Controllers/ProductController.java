@@ -1,21 +1,33 @@
 package com.sii.promoCodes.Controllers;
 
+import com.sii.promoCodes.Models.DiscountResult;
+import com.sii.promoCodes.Models.PromoCode;
+import com.sii.promoCodes.Services.DiscountResultService;
 import com.sii.promoCodes.Services.ProductService;
 import com.sii.promoCodes.Models.Product;
+import com.sii.promoCodes.Services.PromoCodeService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/products")
 public class ProductController {
     private final ProductService productService;
 
-    public ProductController(ProductService productService) {
+    private final DiscountResultService discountResultService;
+
+    private final PromoCodeService promoCodeService;
+
+    public ProductController(ProductService productService, DiscountResultService discountResultService, PromoCodeService promoCodeService) {
         this.productService = productService;
+        this.discountResultService = discountResultService;
+        this.promoCodeService = promoCodeService;
     }
+
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
@@ -28,11 +40,11 @@ public class ProductController {
         return productService.getAllProducts();
     }
 
-    @GetMapping("/{name}")
-    public ResponseEntity<Product> getProductByname(@PathVariable String name) {
-        Product product = productService.getProductByName(name);
-        if (product == null) {
-            return new ResponseEntity(HttpStatus.NOT_FOUND);
+    @GetMapping("/{id}")
+    public ResponseEntity<Optional<Product>> getProductById(@PathVariable long id ) {
+        Optional<Product> product = productService.getProductById(id);
+        if (product.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         return ResponseEntity.ok(product);
     }
@@ -43,10 +55,14 @@ public class ProductController {
         return productService.updateProduct(product);
     }
 
-    @PostMapping("/{productName}/{promoCode}")
+    @PostMapping("/{id}/{promoCodeStr}")
     @ResponseStatus(HttpStatus.CREATED)
-    public Product discountProduct(@PathVariable String productName, @PathVariable String promoCode) {
-        return productService.discountProduct(productName, promoCode);
+    public ResponseEntity<DiscountResult> discountProduct(@PathVariable long id, @PathVariable String promoCodeStr) {
+        PromoCode promoCode = promoCodeService.getPromoCode(promoCodeStr);
+        if (promoCode == null) {
+            return new ResponseEntity(HttpStatus.NOT_FOUND);
+        }
+        return ResponseEntity.ok(discountResultService.discountProduct(id, promoCodeStr));
 
     }
 }

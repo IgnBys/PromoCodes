@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class PurchaseService {
@@ -24,72 +25,9 @@ public class PurchaseService {
         this.purchaseRepository = purchaseRepository;
     }
 
-//    public PurchaseService(ProductService productService, PromoCodeService promoCodeService, PurchaseRepository purchaseRepository) {
-//        this.productService = productService;
-//        this.promoCodeService = promoCodeService;
-//        this.purchaseRepository = purchaseRepository;
-//    }
 
-    public Purchase simulatePurchaseWithPromoCode(String productName, String promoCodeStr) {
-        Product productOptional = productService.getProductByName(productName);
-        if(productOptional != null) {
-            Product product = productOptional;
-            PromoCode promoCode = promoCodeService.getPromoCode(promoCodeStr);
-            BigDecimal regularPrice = product.getPrice();
-            BigDecimal discountAmount = BigDecimal.ZERO;
-            if (promoCode!=null) {
-                if(promoCode.getExpirationDate().isBefore(LocalDateTime.now())){
-                    throw new RuntimeException("Promo code expired");
-                }
-                if (!promoCode.getCurrency().equals(product.getCurrency())) {
-                    throw new RuntimeException("Currency mismatch");
-                }
-                if (promoCode.getCurrentUsages() >= promoCode.getMaxUsages()) {
-                    throw new RuntimeException("Promo code usage limit reached");
-                }
-                discountAmount = promoCode.getDiscountAmount();
-                promoCode.setCurrentUsages(promoCode.getCurrentUsages() + 1);
-                promoCodeRepository.save(promoCode);
 
-            }
-            BigDecimal finalPrice = regularPrice.subtract(discountAmount).max(BigDecimal.ZERO);
 
-            Purchase purchase = new Purchase();
-            purchase.setPurchaseDate(LocalDateTime.now());
-            purchase.setRegularPrice(regularPrice);
-            purchase.setDiscountAmount(discountAmount);
-            purchase.setProduct(product);
-            purchase.setFinalPrice(finalPrice);
-
-            return purchaseRepository.save(purchase);
-        }
-        else {
-            throw new RuntimeException("Product not found");
-        }
-
-    }
-
-    public Purchase simulatePurchaseWithoutPromoCode(String productName) {
-        Product productOptional = productService.getProductByName(productName);
-        if (productOptional != null) {
-            Product product = productOptional;
-            BigDecimal regularPrice = product.getPrice();
-            BigDecimal discountAmount = BigDecimal.ZERO;
-
-            BigDecimal finalPrice = regularPrice.subtract(discountAmount).max(BigDecimal.ZERO);
-
-            Purchase purchase = new Purchase();
-            purchase.setPurchaseDate(LocalDateTime.now());
-            purchase.setRegularPrice(regularPrice);
-            purchase.setDiscountAmount(discountAmount);
-            purchase.setProduct(product);
-            purchase.setFinalPrice(finalPrice);
-
-            return purchaseRepository.save(purchase);
-        } else {
-            throw new RuntimeException("Product not found");
-        }
-    }
 
 
     public List<Purchase> getAllPurchases() {
