@@ -39,18 +39,21 @@ class PurchaseTests {
     @Test
     void shouldGetAllPurchases(){
         Purchase purchase1 = new Purchase(1L,
+                null,
                 LocalDateTime.now(),
                 BigDecimal.valueOf(45.55),
                 BigDecimal.valueOf(20.00),
                 BigDecimal.valueOf(25.55),
                 null);
         Purchase purchase2 = new Purchase(2L,
+                null,
                 LocalDateTime.now(),
                 BigDecimal.valueOf(25.55),
                 BigDecimal.valueOf(0),
                 BigDecimal.valueOf(25.55),
                 null);
         Purchase purchase3 = new Purchase(3L,
+                null,
                 LocalDateTime.now(),
                 BigDecimal.valueOf(25.55),
                 BigDecimal.valueOf(0),
@@ -73,11 +76,12 @@ class PurchaseTests {
                 "PLN",
                 null);
         Purchase expectedPurchase = new Purchase(null,
+                product,
                 LocalDateTime.now(),
                 BigDecimal.valueOf(25.55),
                 BigDecimal.valueOf(0),
                 BigDecimal.valueOf(25.55),
-                null);
+                "Successful purchase");
 
         when(productService.getProductById(1L)).thenReturn(Optional.of(product));
         when(purchaseRepository.save(expectedPurchase)).thenReturn(expectedPurchase);

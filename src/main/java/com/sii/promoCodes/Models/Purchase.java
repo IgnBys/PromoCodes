@@ -8,27 +8,27 @@ public class Purchase {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @Column
+    @ManyToOne
+    @JoinColumn(nullable = false)
+    private Product product;
+    @Column(nullable = false)
     private String warning;
-
     @Column(nullable = false)
     private LocalDateTime purchaseDate;
-
     @Column(nullable = false)
     private BigDecimal regularPrice;
-
     @Column(nullable = false)
     private BigDecimal discountAmount;
-
+    @Column(nullable = false)
     private BigDecimal finalPrice;
 
     public Purchase(){
 
     }
 
-    public Purchase(Long id, LocalDateTime purchaseDate, BigDecimal regularPrice, BigDecimal discountAmount, BigDecimal finalPrice, String warning) {
+    public Purchase(Long id, Product product, LocalDateTime purchaseDate, BigDecimal regularPrice, BigDecimal discountAmount, BigDecimal finalPrice, String warning) {
         this.id = id;
+        this.product = product;
         this.purchaseDate = purchaseDate;
         this.regularPrice = regularPrice;
         this.discountAmount = discountAmount;
@@ -37,7 +37,8 @@ public class Purchase {
 
     }
 
-    public Purchase(LocalDateTime purchaseDate, BigDecimal regularPrice, BigDecimal discountAmount, BigDecimal finalPrice, String warning) {
+    public Purchase(Product product, LocalDateTime purchaseDate, BigDecimal regularPrice, BigDecimal discountAmount, BigDecimal finalPrice, String warning) {
+        this.product = product;
         this.purchaseDate = purchaseDate;
         this.regularPrice = regularPrice;
         this.discountAmount = discountAmount;
@@ -53,13 +54,13 @@ public class Purchase {
         this.id = id;
     }
 
-//    public Product getProduct() {
-//        return product;
-//    }
-//
-//    public void setProduct(Product product) {
-//        this.product = product;
-//    }
+    public Product getProduct() {
+        return product;
+    }
+
+    public void setProduct(Product product) {
+        this.product = product;
+    }
 
     public LocalDateTime getPurchaseDate() {
         return purchaseDate;

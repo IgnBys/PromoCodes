@@ -78,7 +78,7 @@ public class DiscountResultService {
             Product product = productOptional.get();
             PromoCode promoCode = promoCodeService.getPromoCode(promoCodeStr);
             BigDecimal regularPrice = product.getPrice();
-            Purchase purchase = new Purchase(LocalDateTime.now(),regularPrice,promoCode.getDiscountAmount(), regularPrice, warning);
+            Purchase purchase = new Purchase(product ,LocalDateTime.now(),regularPrice,promoCode.getDiscountAmount(), regularPrice, warning);
                 if (promoCode.getExpirationDate().isBefore(LocalDateTime.now())) {
                     warning = "Promo code expired";
                 }
@@ -115,7 +115,7 @@ public class DiscountResultService {
         if(optionalProduct.isPresent()) {
             Product product = optionalProduct.get();
             BigDecimal regularPrice = product.getPrice();
-            Purchase purchase = new Purchase(LocalDateTime.now(),regularPrice,BigDecimal.valueOf(0), regularPrice, "Successful purchase");
+            Purchase purchase = new Purchase(product,LocalDateTime.now(),regularPrice,BigDecimal.valueOf(0), regularPrice, "Successful purchase");
             purchaseRepository.save(purchase);
             return purchase;
         } else {
