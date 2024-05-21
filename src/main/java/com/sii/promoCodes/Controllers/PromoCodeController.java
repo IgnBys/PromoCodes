@@ -22,16 +22,7 @@ public class PromoCodeController {
     public PromoCode createPromoCode(@RequestBody PromoCode promoCode) {
         return promoCodeService.createPromoCode(promoCode);
     }
-//        PromoCode createdPromoCode = promoCodeService.createPromoCode(promoCode);
-//        if(createdPromoCode != null){
-//
-//            return ResponseEntity.ok(createdPromoCode);
-//        }
-//        else {
-//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).header("error", "Incorrect length").build();
-//
-//        }
-//    }
+
 
     @GetMapping
     public ResponseEntity<List<PromoCode>> getAllPromoCodes() {

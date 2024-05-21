@@ -1,18 +1,14 @@
 package com.sii.promoCodes.Controllers;
 
 
-import com.sii.promoCodes.Models.DiscountResult;
 import com.sii.promoCodes.Models.PromoCode;
 import com.sii.promoCodes.Models.Purchase;
 import com.sii.promoCodes.Services.DiscountResultService;
 import com.sii.promoCodes.Services.PromoCodeService;
 import com.sii.promoCodes.Services.PurchaseService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.http.ResponseEntity;
-
-import javax.print.attribute.standard.PrinterURI;
 import java.util.List;
 
 

@@ -9,10 +9,6 @@ public class Purchase {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-//    @ManyToOne
-//    @JoinColumn(nullable = false)
-//    private Product product;
-
     @Column
     private String warning;
 

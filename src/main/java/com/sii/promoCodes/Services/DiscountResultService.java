@@ -4,11 +4,8 @@ import com.sii.promoCodes.Models.DiscountResult;
 import com.sii.promoCodes.Models.Product;
 import com.sii.promoCodes.Models.PromoCode;
 import com.sii.promoCodes.Models.Purchase;
-import com.sii.promoCodes.Repositories.ProductRepository;
 import com.sii.promoCodes.Repositories.PromoCodeRepository;
 import com.sii.promoCodes.Repositories.PurchaseRepository;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -22,6 +19,8 @@ public class DiscountResultService {
     private final PromoCodeRepository promoCodeRepository;
     private final PurchaseRepository purchaseRepository;
 
+
+
     public DiscountResultService(PromoCodeService promoCodeService, ProductService productService, PromoCodeRepository promoCodeRepository, PurchaseRepository purchaseRepository) {
         this.promoCodeService = promoCodeService;
         this.productService = productService;
@@ -33,7 +32,7 @@ public class DiscountResultService {
         Optional<Product> optionalProduct = productService.getProductById(id);
         if(optionalProduct.isPresent()) {
             Product product = optionalProduct.get();
-            DiscountResult discountResult = new DiscountResult(product.getName(), product.getPrice(),product.getCurrency(), null);
+            DiscountResult discountResult = new DiscountResult(product.getName(), product.getPrice(),product.getCurrency(), "Promotional code applied");
             PromoCode promoCode = promoCodeRepository.findByCode(promoCodeStr);
             BigDecimal discountAmount = BigDecimal.ZERO;
 
@@ -61,8 +60,6 @@ public class DiscountResultService {
                 discountResult.setResultPrice(finalPrice);
 
 
-//                promoCode.setCurrentUsages(promoCode.getCurrentUsages() + 1);
-//                promoCodeRepository.save(promoCode);
             }
 
             return discountResult;
@@ -75,13 +72,13 @@ public class DiscountResultService {
 
 
     public Purchase simulatePurchaseWithPromoCode(long id, String promoCodeStr) {
-        String warning = null;
+        String warning = "Promotional code applied";
         Optional<Product> productOptional = productService.getProductById(id);
         if(productOptional.isPresent()) {
             Product product = productOptional.get();
             PromoCode promoCode = promoCodeService.getPromoCode(promoCodeStr);
             BigDecimal regularPrice = product.getPrice();
-            Purchase purchase = new Purchase(LocalDateTime.now(),regularPrice,promoCode.getDiscountAmount(), regularPrice, null);
+            Purchase purchase = new Purchase(LocalDateTime.now(),regularPrice,promoCode.getDiscountAmount(), regularPrice, warning);
                 if (promoCode.getExpirationDate().isBefore(LocalDateTime.now())) {
                     warning = "Promo code expired";
                 }
@@ -118,7 +115,8 @@ public class DiscountResultService {
         if(optionalProduct.isPresent()) {
             Product product = optionalProduct.get();
             BigDecimal regularPrice = product.getPrice();
-            Purchase purchase = new Purchase(LocalDateTime.now(),regularPrice,BigDecimal.valueOf(0), regularPrice, null);
+            Purchase purchase = new Purchase(LocalDateTime.now(),regularPrice,BigDecimal.valueOf(0), regularPrice, "Successful purchase");
+            purchaseRepository.save(purchase);
             return purchase;
         } else {
             throw new RuntimeException("Product not found");

@@ -2,11 +2,8 @@ package com.sii.promoCodes.Models;
 
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
 
 import java.math.BigDecimal;
-import java.util.concurrent.ThreadPoolExecutor;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class DiscountResult {
@@ -18,10 +15,10 @@ public class DiscountResult {
 
     private String warning;
 
+
     public DiscountResult(){
 
     }
-
     public DiscountResult(String name, BigDecimal resultPrice, String currency, String warning) {
         this.name = name;
         this.resultPrice = resultPrice;
