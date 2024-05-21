@@ -1,15 +1,10 @@
 package com.sii.promoCodes.Models;
 
 import jakarta.persistence.*;
-
 import java.math.BigDecimal;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
+import org.hibernate.annotations.CreationTimestamp;
 import java.time.LocalDateTime;
-import java.util.Date;
-import java.util.Random;
+import java.time.temporal.ChronoUnit;
 
 @Entity
 public class PromoCode{
@@ -23,6 +18,12 @@ public class PromoCode{
     @Column(nullable = false)
     private LocalDateTime expirationDate;
 
+
+
+    @CreationTimestamp
+    @Column(nullable = false)
+    private LocalDateTime startedAt;
+
     @Column(nullable = false)
     private BigDecimal discountAmount;
 
@@ -32,6 +33,27 @@ public class PromoCode{
     @Column(nullable = false)
     private int maxUsages;
 
+    @Column(nullable = false)
+    private int currentUsages;
+
+
+    public PromoCode() {
+
+    }
+    public PromoCode(Long id, String code, LocalDateTime expirationDate, LocalDateTime startedAt, BigDecimal discountAmount, String currency, int maxUsages, int currentUsages) {
+        this.id = id;
+        this.code = code;
+        this.expirationDate = expirationDate;
+        this.startedAt = startedAt;
+        this.discountAmount = discountAmount;
+        this.currency = currency;
+        this.maxUsages = maxUsages;
+        this.currentUsages = currentUsages;
+    }
+
+
+
+
     public Long getId() {
         return id;
     }
@@ -40,12 +62,20 @@ public class PromoCode{
         this.id = id;
     }
 
+
     public String getCode() {
         return code;
     }
 
     public void setCode(String code) {
         this.code = code;
+    }
+    public LocalDateTime getStartedAt() {
+        return startedAt.truncatedTo(ChronoUnit.SECONDS);
+    }
+
+    public void setStartedAt(LocalDateTime startedAt) {
+        this.startedAt = startedAt;
     }
 
     public LocalDateTime getExpirationDate() {
@@ -88,80 +118,5 @@ public class PromoCode{
         this.currentUsages = currentUsages;
     }
 
-    @Column(nullable = false)
-    private int currentUsages;
 
-//
-//    private static final String CHARACTERS = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-//
-//    private String code;
-//    private Date expirationDate;
-//    private double discountAmount;
-//    private String currency;
-//    private int maxUsages;
-//
-//
-//    public PromoCode() {
-//        this.code = generateUniqueCode();
-//    }
-//    public PromoCode(Date expirationDate, double discountAmount, String currency, int maxUsages) {
-//        this.code = generateUniqueCode();
-//        this.expirationDate = expirationDate;
-//        this.discountAmount = discountAmount;
-//        this.currency = currency;
-//        this.maxUsages = maxUsages;
-//    }
-//
-//    public String getCode() {
-//        return code;
-//    }
-//
-//    public void setCode(String code) {
-//        this.code = code;
-//    }
-//
-//    public Date getExpirationDate() {
-//        return expirationDate;
-//    }
-//
-//    public void setExpirationDate(Date expirationDate) {
-//        this.expirationDate = expirationDate;
-//    }
-//
-//    public double getDiscountAmount() {
-//        return discountAmount;
-//    }
-//
-//    public void setDiscountAmount(double discountAmount) {
-//        this.discountAmount = discountAmount;
-//    }
-//
-//    public String getCurrency() {
-//        return currency;
-//    }
-//
-//    public void setCurrency(String currency) {
-//        this.currency = currency;
-//    }
-//
-//    public int getMaxUsages() {
-//        return maxUsages;
-//    }
-//
-//    public void setMaxUsages(int maxUsages) {
-//        this.maxUsages = maxUsages;
-//    }
-//
-////    private String generateUniqueCode() {
-////        return UUID.randomUUID().toString().replaceAll("-", "").substring(0, 24);
-////    }
-//
-//    private static String generateUniqueCode() {
-//        Random random = new Random();
-//        StringBuilder codeBuilder = new StringBuilder(24);
-//        for (int i = 0; i < 24; i++) {
-//            codeBuilder.append(CHARACTERS.charAt(random.nextInt(CHARACTERS.length())));
-//        }
-//        return codeBuilder.toString();
-//    }
 }
