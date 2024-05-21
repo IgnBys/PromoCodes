@@ -52,7 +52,7 @@ To get a particular product enter **/api/products/{id}**.
 
 > ##### To work with promo codes, you can use a data structure in JSON format:
 > {
-> "name": "SUMMER2024",
+> "code": "SUMMER2024",
 > "discountAmount": 25.55,
 > "expirationDate": "2024-07-01T11:06:18",
 > "currency": "PLN",
