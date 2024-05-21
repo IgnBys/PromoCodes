@@ -33,14 +33,19 @@ For further HTTP requests, add the necessary commands to the initial URL address
 > }
 
 _(Method POST)_
+
 To add a product enter **/api/products**.
+
 To apply a promo code to a product, enter **/api/products/{id}/{promocode}** ({id} - product identifier, {promocode} - promo code name).
 
 _(Method PUT)_
+
 To change product parameters enter **/api/products/{id}**.
 
 _(Method GET)_
+
 To get all existing products enter **/api/products**.
+
 To get a particular product enter **/api/products/{id}**.
 
 ## Promo code
@@ -55,18 +60,24 @@ To get a particular product enter **/api/products/{id}**.
 > }
 
 _(Method POST)_
+
 To add a promo code enter **/api/promocodes**.
 
 _(Method GET)_
+
 To get all existing promo codes enter **/api/promocodes**.
+
 To get a particular promo code enter **/api/promocodes/{promocode}** ({promocode} - promo code name).
 
 ## Purchase
 
 _(Method POST)_
+
 To simulate a purchase with using promo code enter **/api/purchase/{id}/{promocode}** ({id} - product identifier, {promocode} - promo code name).
+
 To simulate a purchase without using promo code enter **/api/purchase/{id}**.
 
 
 _(Method GET)_
+
 To get all existing purchases enter **/api/purchase**.
