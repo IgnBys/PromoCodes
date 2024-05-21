@@ -13,7 +13,7 @@ import java.util.List;
 
 
 @RestController
-@RequestMapping("/purchase")
+@RequestMapping("/api/purchase")
 public class PurchaseController {
 
     private final PromoCodeService promoCodeService;
